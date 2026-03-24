@@ -1,6 +1,9 @@
 networks:
   dev:
 
+volumes:
+  ollama_data:
+
 services:
   backend:
     build: ./server
@@ -9,5 +12,15 @@ services:
 
   frontend:
     build: ./frontend
+    networks:
+      - dev
+
+  ollama:
+    build: ./ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
     networks:
       - dev
