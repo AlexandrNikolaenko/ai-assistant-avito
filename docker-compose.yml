@@ -1,0 +1,13 @@
+networks:
+  dev:
+
+services:
+  backend:
+    build: ./server
+    networks:
+      - dev
+
+  frontend:
+    build: ./frontend
+    networks:
+      - dev

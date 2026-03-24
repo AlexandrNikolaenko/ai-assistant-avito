@@ -1,0 +1,38 @@
+.custom-select .MuiOutlinedInput-notchedOutline {
+  display: none;
+}
+
+.view-button {
+  @media (max-width: 548px) {
+    display: none;
+  }
+}
+
+.search {
+  background-color: #f6f6f8;
+  border-radius: 8px;
+  display: flex;
+  gap: 0;
+  border: none;
+  height: 32px;
+  width: 100%;
+}
+
+.search > input {
+  padding: 5px 12px;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  color: black;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.search > button {
+  background-color: transparent;
+  border: none;
+  padding: 9px 12px;
+}
