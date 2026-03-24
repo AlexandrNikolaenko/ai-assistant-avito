@@ -100,10 +100,41 @@ http://localhost:11434
 
 ### Backend
 
-Была добавлена обработка prefight запроса для устранения ошибки CORS
-Было принято решение дописать обработку сортировки по полю "price", так как сервер возвращал ответ со статусом 500
+Была добавлена обработка prefight запроса для устранения ошибки CORS в файле server.ts:
+
+```
+fastify.use((req, reply, next) => {
+  reply.setHeader('Access-Control-Allow-Origin', '*');
+  reply.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  reply.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    reply.statusCode = 204;
+    return reply.end();
+  }
+
+  next();
+});
+```
+
+Было принято решение дописать обработку сортировки по полю "price", так как сервер возвращал ответ со статусом 500:
+
+Изменение валидации в файлу validation.ts:
+
+```
+sortColumn: z.enum<ItemSortColumn[]>(['title', 'createdAt', 'price']).optional(),
+```
+
+Добавление обработки поля в фале server.ts:
+
+```
+else if (sortColumn === 'price') {
+  comparisonValue = item1.price - item2.price;
+}
+```
 
 ### Frontend
 
-При начале разработки принял решение писать с использованием библиотеки MUI. Но в ходе работы с макетом обнаружил чрезвычайную схожесть с компонентами AntDesign, в следствии чего переписал большую часть тестового задания на AntDesign.
-В проекте испоьлзуются обе библиотеки, так как для полного перевода на AntDesign не хватило времени.
+При начале разработки принял решение писать с использованием библиотеки MUI. Но в ходе работы с макетом обнаружил чрезвычайное сходство с компонентами AntDesign, в следствии чего переписал большую часть тестового задания на AntDesign.
+
+В проекте используются обе библиотеки, так как для полного перевода на AntDesign не хватило времени.
