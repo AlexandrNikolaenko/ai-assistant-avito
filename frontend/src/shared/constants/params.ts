@@ -12,16 +12,16 @@ export const paramsRu: {
   condition: string;
   color: string;
 } = {
-  brand: 'Брэнд',
-  model: 'Модель',
-  yearOfManufacture: 'Год производства',
-  transmission: 'КПП',
-  mileage: 'Пробег',
-  enginePower: 'Мощность двигателя',
-  type: 'Тип',
-  address: 'Адресс',
-  area: 'Район',
-  floor: 'Этаж',
-  condition: 'Состояние',
-  color: 'Цвет'
-}
+  brand: "Брэнд",
+  model: "Модель",
+  yearOfManufacture: "Год производства",
+  transmission: "КПП",
+  mileage: "Пробег",
+  enginePower: "Мощность двигателя",
+  type: "Тип",
+  address: "Адресс",
+  area: "Район",
+  floor: "Этаж",
+  condition: "Состояние",
+  color: "Цвет",
+};
