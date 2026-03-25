@@ -1,5 +1,8 @@
 import type { Item } from "@/shared/types/items";
 import { Typography } from "antd";
+import { paramsRu } from "@/shared/constants/params";
+
+type ParamsKey = keyof typeof paramsRu;
 
 export default function Params({ item }: { item: Item }) {
   const params = item.params as Record<string, unknown>;
@@ -26,7 +29,7 @@ export default function Params({ item }: { item: Item }) {
           <Typography.Text
             style={{ fontWeight: 600, color: "#00000073", textAlign: "left" }}
           >
-            {key}
+            {paramsRu[key as ParamsKey] ? paramsRu[key as ParamsKey] : key}
           </Typography.Text>
           <Typography.Text style={{ textAlign: "left" }}>
             {String(value)}

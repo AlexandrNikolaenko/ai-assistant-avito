@@ -32,10 +32,10 @@ export default function ItemHeader({
           flexWrap: "wrap",
         }}
       >
-        <Typography.Title level={4} style={{ margin: 0 }}>
+        <Typography.Title level={4} style={{ margin: 0, fontSize: '30px' }}>
           {data?.title}
         </Typography.Title>
-        <Typography.Title level={5} style={{ margin: 0 }}>
+        <Typography.Title level={5} style={{ margin: 0, fontSize: '30px' }}>
           {data && data.price !== null
             ? data.price.toLocaleString("ru-RU")
             : "—"}{" "}
@@ -64,10 +64,10 @@ export default function ItemHeader({
         </Flex>
 
         <Flex vertical gap={0} style={{ alignItems: "flex-start" }}>
-          <Typography.Text type="secondary">
+          <Typography.Text style={{fontSize: '16px'}} type="secondary">
             Опубликовано: {data ? formatDate(data.createdAt) : ""}
           </Typography.Text>
-          <Typography.Text type="secondary">
+          <Typography.Text style={{fontSize: '16px'}} type="secondary">
             Отредактировано: {data ? formatDate(data.updatedAt) : ""}
           </Typography.Text>
         </Flex>

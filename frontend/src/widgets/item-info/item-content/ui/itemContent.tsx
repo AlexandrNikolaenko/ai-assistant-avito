@@ -2,6 +2,7 @@ import type { ItemGetOut } from "@/shared/types/items";
 import { Alert, Flex, Space, Typography } from "antd";
 import { getMissingRevisionFields } from "@/shared/lib/revision";
 import Params from "../../item-params/ui/itemParams";
+import '../style/itemContent.css'
 
 export default function ItemContent({ data }: { data?: ItemGetOut }) {
   return (
@@ -9,7 +10,7 @@ export default function ItemContent({ data }: { data?: ItemGetOut }) {
       <div
         style={{
           display: "flex",
-          gap: 32,
+          gap: '32px',
           alignItems: "flex-start",
         }}
       >
@@ -19,10 +20,10 @@ export default function ItemContent({ data }: { data?: ItemGetOut }) {
 
         <Flex
           vertical
-          gap={12}
+          gap={36}
           style={{ width: "100%", alignItems: "flex-start" }}
         >
-          {data?.needsRevision ? (
+          {data?.needsRevision && (
             <Alert
               type="warning"
               title="Требуются доработки"
@@ -32,7 +33,7 @@ export default function ItemContent({ data }: { data?: ItemGetOut }) {
                   <div style={{ marginTop: 4, textAlign: "start" }}>
                     У объявления не заполнены поля:
                   </div>
-                  <ul>
+                  <ul style={{margin: 0, paddingLeft: '20px'}}>
                     {getMissingRevisionFields(data).map((item) => (
                       <li key={item} style={{ width: "fit-content" }}>
                         {item}
@@ -46,12 +47,11 @@ export default function ItemContent({ data }: { data?: ItemGetOut }) {
                 borderRadius: "8px",
                 width: "512px",
                 maxWidth: "512px",
+                border: 'none'
               }}
             ></Alert>
-          ) : (
-            <Alert type="success" message="Объявление заполнено корректно." />
-          )}
-          <Typography.Title level={5} style={{ margin: 0 }}>
+            )}
+          <Typography.Title level={5} style={{ margin: 0, fontSize: '22px' }}>
             Характеристики
           </Typography.Title>
           {data ? <Params item={data} /> : null}
@@ -60,14 +60,15 @@ export default function ItemContent({ data }: { data?: ItemGetOut }) {
 
       <Flex
         vertical
-        gap={12}
+        gap={16}
         style={{ alignItems: "flex-start", maxWidth: "480px" }}
       >
-        <Typography.Title level={5} style={{ margin: 0 }}>
+        <Typography.Title level={5} style={{ margin: 0, fontSize: '22px' }}>
           Описание
         </Typography.Title>
         <Typography.Text
           style={{
+            fontSize: '16px',
             textAlign: "start",
             whiteSpace: "pre-wrap",
             display: "block",
@@ -75,7 +76,7 @@ export default function ItemContent({ data }: { data?: ItemGetOut }) {
         >
           {data?.description?.trim()
             ? data.description
-            : "Описание отсутствует"}
+            : "Отсутствует"}
         </Typography.Text>
       </Flex>
     </>
