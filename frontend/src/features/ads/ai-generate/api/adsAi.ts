@@ -2,7 +2,7 @@ import type {
   AutoParams,
   ElectronicsParams,
   RealEstateParams,
-  ItemCategory
+  ItemCategory,
 } from "@/shared/types/items";
 import { ollamaGenerate } from "./ollamaClient";
 

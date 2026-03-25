@@ -21,8 +21,14 @@ import type {
   ItemParams,
   RealEstateParams,
 } from "@/shared/types/items";
-import { CATEGORY_LABELS, CATEGORY_OPTIONS } from "@/shared/constants/categories";
-import { aiImproveDescription, aiPredictMarketPrice } from "@/features/ads/ai-generate/api/adsAi";
+import {
+  CATEGORY_LABELS,
+  CATEGORY_OPTIONS,
+} from "@/shared/constants/categories";
+import {
+  aiImproveDescription,
+  aiPredictMarketPrice,
+} from "@/features/ads/ai-generate/api/adsAi";
 import { Content } from "antd/es/layout/layout";
 
 type DraftState = {
@@ -316,7 +322,9 @@ export function AdsEditPage() {
           ) : isError ? (
             <Alert
               type="error"
-              message={error instanceof Error ? error.message : "Ошибка загрузки"}
+              message={
+                error instanceof Error ? error.message : "Ошибка загрузки"
+              }
             />
           ) : (
             <>
@@ -411,7 +419,11 @@ export function AdsEditPage() {
                 <Flex
                   gap={12}
                   align="end"
-                  style={{ width: "100%", alignItems: "end", maxWidth: "675px" }}
+                  style={{
+                    width: "100%",
+                    alignItems: "end",
+                    maxWidth: "675px",
+                  }}
                 >
                   <Flex
                     vertical
@@ -455,7 +467,9 @@ export function AdsEditPage() {
                     disabled={aiLoading !== null}
                   >
                     <img src="/BulbIcon.svg" />
-                    {aiLoading === "price" ? "Оценка..." : "Узнать рыночную цену"}
+                    {aiLoading === "price"
+                      ? "Оценка..."
+                      : "Узнать рыночную цену"}
                   </Button>
                 </Flex>
 
@@ -489,7 +503,9 @@ export function AdsEditPage() {
                         style={{ width: "100%", maxWidth: "456px" }}
                         placeholder="Бренд"
                         value={String((draft.params as AutoParams).brand ?? "")}
-                        onChange={(e) => setParamString("brand", e.target.value)}
+                        onChange={(e) =>
+                          setParamString("brand", e.target.value)
+                        }
                       />
                       <Input
                         status={
@@ -500,12 +516,15 @@ export function AdsEditPage() {
                         style={{ width: "100%", maxWidth: "456px" }}
                         placeholder="Модель"
                         value={String((draft.params as AutoParams).model ?? "")}
-                        onChange={(e) => setParamString("model", e.target.value)}
+                        onChange={(e) =>
+                          setParamString("model", e.target.value)
+                        }
                       />
                       <Input
                         status={
                           String(
-                            (draft.params as AutoParams).yearOfManufacture ?? "",
+                            (draft.params as AutoParams).yearOfManufacture ??
+                              "",
                           ) == ""
                             ? "warning"
                             : "validating"
@@ -566,7 +585,8 @@ export function AdsEditPage() {
                       />
                       <Input
                         status={
-                          String((draft.params as AutoParams).mileage ?? "") == ""
+                          String((draft.params as AutoParams).mileage ?? "") ==
+                          ""
                             ? "warning"
                             : "validating"
                         }
@@ -672,8 +692,9 @@ export function AdsEditPage() {
                       />
                       <Input
                         status={
-                          String((draft.params as RealEstateParams).area ?? "") ==
-                          ""
+                          String(
+                            (draft.params as RealEstateParams).area ?? "",
+                          ) == ""
                             ? "warning"
                             : "validating"
                         }
@@ -703,7 +724,9 @@ export function AdsEditPage() {
                             ? ""
                             : String((draft.params as RealEstateParams).floor)
                         }
-                        onChange={(e) => setParamNumber("floor", e.target.value)}
+                        onChange={(e) =>
+                          setParamNumber("floor", e.target.value)
+                        }
                       />
                     </Flex>
                   ) : null}
@@ -767,7 +790,9 @@ export function AdsEditPage() {
                         value={String(
                           (draft.params as ElectronicsParams).brand ?? "",
                         )}
-                        onChange={(e) => setParamString("brand", e.target.value)}
+                        onChange={(e) =>
+                          setParamString("brand", e.target.value)
+                        }
                       />
                       <Input
                         status={
@@ -782,7 +807,9 @@ export function AdsEditPage() {
                         value={String(
                           (draft.params as ElectronicsParams).model ?? "",
                         )}
-                        onChange={(e) => setParamString("model", e.target.value)}
+                        onChange={(e) =>
+                          setParamString("model", e.target.value)
+                        }
                       />
                       <Select
                         status={
@@ -837,7 +864,9 @@ export function AdsEditPage() {
                         value={String(
                           (draft.params as ElectronicsParams).color ?? "",
                         )}
-                        onChange={(e) => setParamString("color", e.target.value)}
+                        onChange={(e) =>
+                          setParamString("color", e.target.value)
+                        }
                       />
                     </Flex>
                   ) : null}
@@ -848,7 +877,11 @@ export function AdsEditPage() {
                 <Flex
                   vertical
                   gap={8}
-                  style={{ width: "100%", maxWidth: "962px", alignItems: "end" }}
+                  style={{
+                    width: "100%",
+                    maxWidth: "962px",
+                    alignItems: "end",
+                  }}
                 >
                   <Text style={{ width: "100%", textAlign: "left" }}>
                     Описание

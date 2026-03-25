@@ -1,28 +1,15 @@
 import { useMemo, useState } from "react";
-import {
-  Checkbox,
-  Divider,
-  Flex,
-  Form,
-  Layout,
-  Switch,
-  Typography,
-  Button,
-  Space,
-  Spin,
-  Alert,
-} from "antd";
+import { Flex, Layout, Typography, Space, Spin, Alert } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { CATEGORY_LABELS } from "@/shared/constants/categories";
 import type {
   ItemCategory,
   ItemSortColumn,
   SortDirection,
 } from "@/shared/types/items";
 import { getItems } from "@/entities/item/api/itemsApi";
-import { ListItemCard, ItemCard } from "@/entities/item/ui/item-card/item-card";
 import Sort from "@/widgets/sort/ui/sort";
-import Pagination from "@/shared/ui/pagination/pagination";
+import ItemList from "@/widgets/item-list/ui/item-list";
+import Filter from "@/widgets/filter/ui/filter";
 
 const PAGE_SIZE = 10;
 
@@ -37,7 +24,6 @@ export function AdsListPage() {
 
   const [sortColumn, setSortColumn] = useState<ItemSortColumn>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const [isCategoryOpen, setIsCategoryOpen] = useState<boolean>(true);
 
   const [page, setPage] = useState(0);
   const [layout, setLayout] = useState<"grid" | "list">("grid");
@@ -68,6 +54,11 @@ export function AdsListPage() {
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
+  const handleToggleRevisionOnly = () => {
+    setPage(0);
+    setNeedsRevisionOnly((prev) => !prev);
+  };
+
   const toggleCategory = (category: ItemCategory) => {
     setPage(0);
     setSelectedCategories((prev) => {
@@ -83,10 +74,6 @@ export function AdsListPage() {
     setNeedsRevisionOnly(false);
     setSortColumn("createdAt");
     setSortDirection("desc");
-  };
-
-  const handleCategoryOpen = () => {
-    setIsCategoryOpen(!isCategoryOpen);
   };
 
   const handleSearch = (
@@ -163,129 +150,13 @@ export function AdsListPage() {
             handleSortDir={handleSortDir}
           />
           <Flex gap={24}>
-            <Flex style={{ width: "100%", maxWidth: "256px" }}>
-              {/* фильтр */}
-
-              <Flex vertical gap={10} style={{ position: "sticky", top: 16 }}>
-                <Flex
-                  vertical
-                  gap={10}
-                  style={{
-                    padding: "16px",
-                    borderRadius: "8px",
-                    backgroundColor: "white",
-                  }}
-                >
-                  <Typography.Text
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "700",
-                      textAlign: "left",
-                      margin: 0,
-                    }}
-                  >
-                    Фильтры
-                  </Typography.Text>
-                  <button
-                    style={{
-                      padding: 0,
-                      background: "none",
-                      border: "none",
-                      color: "#000000",
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      fontSize: "14px",
-                    }}
-                    onClick={handleCategoryOpen}
-                  >
-                    <Typography.Text style={{ margin: 0 }}>
-                      Категории
-                    </Typography.Text>
-                    <img
-                      src="/ArrowDown.svg"
-                      style={{
-                        transform: isCategoryOpen
-                          ? "rotate(0)"
-                          : "rotate(180deg)",
-                      }}
-                    ></img>
-                  </button>
-                  <Form
-                    style={{
-                      height: isCategoryOpen ? "auto" : "0px",
-                      overflow: "hidden",
-                      gap: "8px",
-                      alignItems: "start",
-                    }}
-                  >
-                    {(Object.keys(CATEGORY_LABELS) as ItemCategory[]).map(
-                      (category) => (
-                        <Form.Item
-                          style={{
-                            fontSize: "14px",
-                            margin: 0,
-                            padding: 0,
-                            width: "min-content",
-                          }}
-                          key={category}
-                        >
-                          <Checkbox
-                            style={{ width: "min-content" }}
-                            checked={selectedCategories.includes(category)}
-                            onChange={() => toggleCategory(category)}
-                          >
-                            {CATEGORY_LABELS[category]}
-                          </Checkbox>
-                        </Form.Item>
-                      ),
-                    )}
-                  </Form>
-                  <Divider
-                    style={{ width: "100%", height: "1px", margin: 0 }}
-                  />
-                  <Form.Item
-                    style={{
-                      textAlign: "left",
-                      flexDirection: "row-reverse",
-                      gap: 0,
-                      textWrap: "wrap",
-                      maxWidth: "224px",
-                      margin: 0,
-                      padding: 0,
-                      fontWeight: 700,
-                    }}
-                  >
-                    Только требующие доработок
-                    <Switch
-                      checked={needsRevisionOnly}
-                      onChange={() => {
-                        setPage(0);
-                        setNeedsRevisionOnly((prev) => !prev);
-                      }}
-                    />
-                  </Form.Item>
-                </Flex>
-
-                <Button
-                  type="text"
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#FFFFFF",
-                    borderRadius: "8px",
-                    border: "none",
-                    padding: "12px 0",
-                    height: "auto",
-                    textTransform: "none",
-                    color: "#848388",
-                  }}
-                  onClick={resetFilters}
-                >
-                  Сбросить фильтры
-                </Button>
-              </Flex>
-            </Flex>
+            <Filter
+              resetFilters={resetFilters}
+              toggleCategory={toggleCategory}
+              selectedCategories={selectedCategories}
+              needsRevisionOnly={needsRevisionOnly}
+              handleToggleRevisionOnly={handleToggleRevisionOnly}
+            />
 
             <Flex
               style={{
@@ -308,46 +179,14 @@ export function AdsListPage() {
               ) : isError ? (
                 <Alert description={errorMessage} type="error"></Alert>
               ) : (
-                <>
-                  <div
-                    style={{
-                      gap: "16px",
-                      display: "grid",
-                      gridTemplateColumns:
-                        layout === "grid"
-                          ? "repeat(auto-fill, minmax(200px, 1fr))"
-                          : "1fr",
-                    }}
-                  >
-                    {data?.items.map((item) =>
-                      layout == "list" ? (
-                        <ListItemCard {...item} key={item.id} />
-                      ) : (
-                        <ItemCard {...item} key={item.id} />
-                      ),
-                    )}
-                  </div>
-
-                  {/* пагинация */}
-
-                  <Pagination
-                    page={page}
-                    totalPages={totalPages}
-                    setPage={setPage}
-                  />
-
-                  {isFetching ? (
-                    <Typography.Text
-                      style={{
-                        marginTop: 1,
-                        textAlign: "center",
-                        marginBottom: 0,
-                      }}
-                    >
-                      Обновляем данные...
-                    </Typography.Text>
-                  ) : null}
-                </>
+                <ItemList
+                  layout={layout}
+                  data={data}
+                  page={page}
+                  totalPages={totalPages}
+                  setPage={setPage}
+                  isFetching={isFetching}
+                />
               )}
             </Flex>
           </Flex>

@@ -1,8 +1,14 @@
 import { useEffect } from "react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { useAppDispatch, useAppSelector } from "../../../app/providers/store/hooks";
-import { setMode, type ThemeMode } from "../../../app/providers/store/themeSlice";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../app/providers/store/hooks";
+import {
+  setMode,
+  type ThemeMode,
+} from "../../../app/providers/store/themeSlice";
 
 const storageKey = "theme";
 

@@ -1,4 +1,4 @@
-import {http} from '@/shared/api/httpClient'
+import { http } from "@/shared/api/httpClient";
 import type {
   ItemGetOut,
   ItemsGetOut,
