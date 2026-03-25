@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Button, Divider, Flex, Layout, Space, Spin, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { getItem } from "../api/itemsApi";
-import type { Item } from "../types/items";
-import { getMissingRevisionFields } from "../utils/revision";
+import { getItem } from "@/entities/item/api/itemsApi";
+import type { Item } from "@/shared/types/items";
+import { getMissingRevisionFields } from "@/shared/lib/revision";
 import { Content } from "antd/es/layout/layout";
 const { Title, Text } = Typography;
 

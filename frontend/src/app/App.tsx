@@ -6,10 +6,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 // import Container from "@mui/material/Container";
 // import { ThemeToggle } from "./components/toggle/ThemeToggle";
-import { useAppSelector } from "./store/hooks";
-import { AdsListPage } from "./pages/AdsListPage";
-import { AdsItemPage } from "./pages/AdsItemPage";
-import { AdsEditPage } from "./pages/AdsEditPage";
+import { useAppSelector } from "./providers/store/hooks";
+import { AdsListPage } from "../pages/ads-list/ui/AdsListPage";
+import { AdsItemPage } from "../pages/ads-item/ui/AdsItemPage";
+import { AdsEditPage } from "../pages/ads-edit/ui/AdsEditPage";
 
 function App() {
   const mode = useAppSelector((state) => state.theme.mode);

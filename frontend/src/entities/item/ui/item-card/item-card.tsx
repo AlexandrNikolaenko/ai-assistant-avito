@@ -1,6 +1,6 @@
 "use client";
 
-import type { AdListItem } from "../../types/items";
+import type { AdListItem } from "../../model/items";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -11,7 +11,7 @@ import {
   Typography,
   Chip,
 } from "@mui/material";
-import { CATEGORY_LABELS } from "../../constants/categories";
+import { CATEGORY_LABELS } from "@/shared/constants/categories";
 import "./item-card.css";
 
 export function ItemCard(item: AdListItem) {

@@ -1,9 +1,9 @@
-import type { ItemCategory } from "../types/items";
 import type {
   AutoParams,
   ElectronicsParams,
   RealEstateParams,
-} from "../types/items";
+  ItemCategory
+} from "@/shared/types/items";
 import { ollamaGenerate } from "./ollamaClient";
 
 function categoryToLabel(category: ItemCategory) {

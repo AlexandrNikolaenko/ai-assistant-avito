@@ -13,16 +13,16 @@ import {
   Typography,
 } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getItem, updateItem } from "../api/itemsApi";
+import { getItem, updateItem } from "@/entities/item/api/itemsApi";
 import type {
   AutoParams,
   ElectronicsParams,
   ItemCategory,
   ItemParams,
   RealEstateParams,
-} from "../types/items";
-import { CATEGORY_LABELS, CATEGORY_OPTIONS } from "../constants/categories";
-import { aiImproveDescription, aiPredictMarketPrice } from "../services/adsAi";
+} from "@/shared/types/items";
+import { CATEGORY_LABELS, CATEGORY_OPTIONS } from "@/shared/constants/categories";
+import { aiImproveDescription, aiPredictMarketPrice } from "@/features/ads/ai-generate/api/adsAi";
 import { Content } from "antd/es/layout/layout";
 
 type DraftState = {

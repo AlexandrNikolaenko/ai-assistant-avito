@@ -1,11 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import "./App.css";
+import "./styles/index.css";
+import "./styles/App.css";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { store } from "./store/store";
+import { store } from "./providers/store/store";
 
 const queryClient = new QueryClient({
   defaultOptions: {

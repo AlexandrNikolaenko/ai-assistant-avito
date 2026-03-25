@@ -1,4 +1,4 @@
-import { http } from "./httpClient";
+import {http} from '@/shared/api/httpClient'
 import type {
   ItemGetOut,
   ItemsGetOut,
@@ -6,7 +6,7 @@ import type {
   ItemSortColumn,
   SortDirection,
   ItemUpdateIn,
-} from "../types/items";
+} from "../model/items";
 
 export type ItemsQuery = {
   q?: string;

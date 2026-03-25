@@ -13,16 +13,16 @@ import {
   Alert,
 } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { CATEGORY_LABELS } from "../constants/categories";
+import { CATEGORY_LABELS } from "@/shared/constants/categories";
 import type {
   ItemCategory,
   ItemSortColumn,
   SortDirection,
-} from "../types/items";
-import { getItems } from "../api/itemsApi";
-import { ListItemCard, ItemCard } from "../components/item-card.tsx/item-card";
-import Sort from "../components/sort/sort";
-import Pagination from "../components/pagination/pagination";
+} from "@/shared/types/items";
+import { getItems } from "@/entities/item/api/itemsApi";
+import { ListItemCard, ItemCard } from "@/entities/item/ui/item-card/item-card";
+import Sort from "@/widgets/sort/ui/sort";
+import Pagination from "@/shared/ui/pagination/pagination";
 
 const PAGE_SIZE = 10;
 
