@@ -12,9 +12,15 @@ function formatDate(iso: string) {
   });
 }
 
-export default function ItemHeader({data, id}: {data?: ItemGetOut, id: number}){
+export default function ItemHeader({
+  data,
+  id,
+}: {
+  data?: ItemGetOut;
+  id: number;
+}) {
   const navigate = useNavigate();
-  
+
   return (
     <Flex vertical gap={12} style={{ width: "100%" }}>
       <div
@@ -46,9 +52,7 @@ export default function ItemHeader({data, id}: {data?: ItemGetOut, id: number}){
         }}
       >
         <Flex gap={12} style={{ marginTop: 8 }}>
-          <Button onClick={() => navigate("/ads")}>
-            Назад к списку
-          </Button>
+          <Button onClick={() => navigate("/ads")}>Назад к списку</Button>
           <Button
             type="primary"
             style={{ borderRadius: "8px" }}
@@ -69,5 +73,5 @@ export default function ItemHeader({data, id}: {data?: ItemGetOut, id: number}){
         </Flex>
       </div>
     </Flex>
-  )
+  );
 }

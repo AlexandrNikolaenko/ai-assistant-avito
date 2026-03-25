@@ -1,33 +1,41 @@
-import { CATEGORY_LABELS, CATEGORY_OPTIONS } from "@/shared/constants/categories";
+import {
+  CATEGORY_LABELS,
+  CATEGORY_OPTIONS,
+} from "@/shared/constants/categories";
 import type { DraftState, ItemCategory } from "@/shared/types/items";
 import { Flex, Typography, Select, Divider, Input, Button } from "antd";
 import { useState } from "react";
 
-const {Text } = Typography
+const { Text } = Typography;
 
-export default function RequiredFields({draft, startAiPrice, aiLoading, checkError, setDraft, handleChange, setProposedPrice}: {
-  draft: DraftState,
-  startAiPrice: () => Promise<void>,
-  aiLoading: "description" | "price" | null,
-  checkError: (field: string, value: string | number) => void,
-  setDraft: React.Dispatch<React.SetStateAction<DraftState | null>>,
-  handleChange: () => void,
-  setProposedPrice: React.Dispatch<React.SetStateAction<number | null>>
+export default function RequiredFields({
+  draft,
+  startAiPrice,
+  aiLoading,
+  checkError,
+  setDraft,
+  handleChange,
+  setProposedPrice,
+}: {
+  draft: DraftState;
+  startAiPrice: () => Promise<void>;
+  aiLoading: "description" | "price" | null;
+  checkError: (field: string, value: string | number) => void;
+  setDraft: React.Dispatch<React.SetStateAction<DraftState | null>>;
+  handleChange: () => void;
+  setProposedPrice: React.Dispatch<React.SetStateAction<number | null>>;
 }) {
   const [focusedFields, setFocusedFields] = useState<string[]>([]);
-  
+
   const handleFocusedField = (field: string) => {
-    if (focusedFields.includes(field))  setFocusedFields(focusedFields.filter((elem) => elem != field));
+    if (focusedFields.includes(field))
+      setFocusedFields(focusedFields.filter((elem) => elem != field));
     else setFocusedFields(focusedFields.concat([field]));
   };
 
   return (
     <>
-      <Flex
-        vertical
-        gap={8}
-        style={{ width: "100%", alignItems: "start" }}
-      >
+      <Flex vertical gap={8} style={{ width: "100%", alignItems: "start" }}>
         <Text>Категория</Text>
         <Select
           onFocus={() => handleFocusedField("category")}
@@ -63,11 +71,7 @@ export default function RequiredFields({draft, startAiPrice, aiLoading, checkErr
 
       <Divider style={{ width: "100%", height: "1px", margin: 0 }} />
 
-      <Flex
-        vertical
-        gap={8}
-        style={{ width: "100%", alignItems: "start" }}
-      >
+      <Flex vertical gap={8} style={{ width: "100%", alignItems: "start" }}>
         <Text>Название</Text>
         <Input
           onFocus={() => handleFocusedField("title")}
@@ -84,9 +88,7 @@ export default function RequiredFields({draft, startAiPrice, aiLoading, checkErr
             const next = e.target.value;
             checkError("title", e.target.value);
             handleChange();
-            setDraft((prev) =>
-              prev ? { ...prev, title: next } : prev,
-            );
+            setDraft((prev) => (prev ? { ...prev, title: next } : prev));
           }}
         />
         {(draft.title.length == 0 || !draft.title) &&
@@ -108,11 +110,7 @@ export default function RequiredFields({draft, startAiPrice, aiLoading, checkErr
           maxWidth: "675px",
         }}
       >
-        <Flex
-          vertical
-          gap={8}
-          style={{ width: "100%", alignItems: "start" }}
-        >
+        <Flex vertical gap={8} style={{ width: "100%", alignItems: "start" }}>
           <Text>Цена</Text>
           <Input
             onFocus={() => handleFocusedField("price")}
@@ -130,16 +128,12 @@ export default function RequiredFields({draft, startAiPrice, aiLoading, checkErr
               checkError("price", e.target.value);
               setProposedPrice(null);
               handleChange();
-              setDraft((prev) =>
-                prev ? { ...prev, price: next } : prev,
-              );
+              setDraft((prev) => (prev ? { ...prev, price: next } : prev));
             }}
           />
           {(draft.price == 0 || !draft.price) &&
             !focusedFields.includes("price") && (
-              <Text style={{ color: "#EC221F" }}>
-                Цена должна быть указана
-              </Text>
+              <Text style={{ color: "#EC221F" }}>Цена должна быть указана</Text>
             )}
         </Flex>
         <Button
@@ -150,13 +144,11 @@ export default function RequiredFields({draft, startAiPrice, aiLoading, checkErr
           disabled={aiLoading !== null}
         >
           <img src="/BulbIcon.svg" />
-          {aiLoading === "price"
-            ? "Оценка..."
-            : "Узнать рыночную цену"}
+          {aiLoading === "price" ? "Оценка..." : "Узнать рыночную цену"}
         </Button>
       </Flex>
 
       <Divider style={{ width: "100%", height: "1px", margin: 0 }} />
     </>
-  )
+  );
 }

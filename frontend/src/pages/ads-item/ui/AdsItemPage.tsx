@@ -1,18 +1,11 @@
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Alert,
-  Divider,
-  Flex,
-  Layout,
-  Spin,
-} from "antd";
+import { Alert, Divider, Flex, Layout, Spin } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { getItem } from "@/entities/item/api/itemsApi";
 import { Content } from "antd/es/layout/layout";
 import ItemContent from "@/widgets/item-info/item-content/ui/itemContent";
 import ItemHeader from "@/widgets/item-info/item-header/ui/itemHeader";
-
 
 export function AdsItemPage() {
   const params = useParams();
@@ -65,11 +58,11 @@ export function AdsItemPage() {
             <Alert type="error" message={errorMessage} />
           ) : (
             <>
-              <ItemHeader data={data} id={id}/>
+              <ItemHeader data={data} id={id} />
 
               <Divider />
 
-              <ItemContent data={data}/>
+              <ItemContent data={data} />
             </>
           )}
         </Flex>

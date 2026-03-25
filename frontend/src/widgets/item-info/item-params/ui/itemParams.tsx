@@ -1,14 +1,15 @@
 import type { Item } from "@/shared/types/items";
 import { Typography } from "antd";
 
-export default function Params({item}: {item: Item}) {
+export default function Params({ item }: { item: Item }) {
   const params = item.params as Record<string, unknown>;
 
   const rows = Object.entries(params).filter(
     ([, value]) => value !== undefined,
   );
 
-  if (!rows.length) return <Typography.Text type="secondary">Нет данных</Typography.Text>;
+  if (!rows.length)
+    return <Typography.Text type="secondary">Нет данных</Typography.Text>;
 
   return (
     <div
@@ -27,7 +28,9 @@ export default function Params({item}: {item: Item}) {
           >
             {key}
           </Typography.Text>
-          <Typography.Text style={{ textAlign: "left" }}>{String(value)}</Typography.Text>
+          <Typography.Text style={{ textAlign: "left" }}>
+            {String(value)}
+          </Typography.Text>
         </div>
       ))}
     </div>

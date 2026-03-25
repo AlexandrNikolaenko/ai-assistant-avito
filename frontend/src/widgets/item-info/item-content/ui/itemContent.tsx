@@ -3,7 +3,7 @@ import { Alert, Flex, Space, Typography } from "antd";
 import { getMissingRevisionFields } from "@/shared/lib/revision";
 import Params from "../../item-params/ui/itemParams";
 
-export default function ItemContent({data}: {data?: ItemGetOut}) {
+export default function ItemContent({ data }: { data?: ItemGetOut }) {
   return (
     <>
       <div
@@ -49,15 +49,12 @@ export default function ItemContent({data}: {data?: ItemGetOut}) {
               }}
             ></Alert>
           ) : (
-            <Alert
-              type="success"
-              message="Объявление заполнено корректно."
-            />
+            <Alert type="success" message="Объявление заполнено корректно." />
           )}
           <Typography.Title level={5} style={{ margin: 0 }}>
             Характеристики
           </Typography.Title>
-          {data ? <Params item={data}/> : null}
+          {data ? <Params item={data} /> : null}
         </Flex>
       </div>
 
@@ -82,5 +79,5 @@ export default function ItemContent({data}: {data?: ItemGetOut}) {
         </Typography.Text>
       </Flex>
     </>
-  )
+  );
 }
