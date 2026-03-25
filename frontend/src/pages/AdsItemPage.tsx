@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Button, Divider, Flex, Space, Spin, Typography } from "antd";
+import { Alert, Button, Divider, Flex, Layout, Space, Spin, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { getItem } from "../api/itemsApi";
 import type { Item } from "../types/items";
 import { getMissingRevisionFields } from "../utils/revision";
-import { Container } from "@mui/material";
+import { Content } from "antd/es/layout/layout";
 const { Title, Text } = Typography;
 
 function formatDate(iso: string) {
@@ -80,155 +80,163 @@ export function AdsItemPage() {
   }
 
   return (
-    <Container maxWidth={false} sx={{ py: 3 }}>
-      <Flex vertical gap={16} style={{ width: "100%", alignItems: "start" }}>
-        {isLoading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "32px 0",
-            }}
-          >
-            <Spin size="large" />
-          </div>
-        ) : isError ? (
-          <Alert type="error" message={errorMessage} />
-        ) : (
-          <>
-            <Flex vertical gap={12} style={{ width: "100%" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                  gap: 16,
-                  flexWrap: "wrap",
-                }}
-              >
-                <Title level={4} style={{ margin: 0 }}>
-                  {data?.title}
-                </Title>
-                <Title level={5} style={{ margin: 0 }}>
-                  {data && data.price !== null
-                    ? data.price.toLocaleString("ru-RU")
-                    : "—"}{" "}
-                  ₽
-                </Title>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                  gap: 16,
-                  flexWrap: "wrap",
-                }}
-              >
-                <Flex gap={12} style={{ marginTop: 8 }}>
-                  <Button onClick={() => navigate("/ads")}>
-                    Назад к списку
-                  </Button>
-                  <Button
-                    type="primary"
-                    style={{ borderRadius: "8px" }}
-                    onClick={() => navigate(`/ads/${id}/edit`)}
-                  >
-                    Редактировать
-                    <img src="/EditIcon.svg" alt="edit icon" />
-                  </Button>
-                </Flex>
-
-                <Flex vertical gap={0} style={{ alignItems: "flex-start" }}>
-                  <Text type="secondary">
-                    Опубликовано: {data ? formatDate(data.createdAt) : ""}
-                  </Text>
-                  <Text type="secondary">
-                    Отредактировано: {data ? formatDate(data.updatedAt) : ""}
-                  </Text>
-                </Flex>
-              </div>
-            </Flex>
-            <Divider />
-
+    <Layout
+      style={{
+        padding: "12px 32px",
+        backgroundColor: "#f7f5f8",
+        minHeight: "100vh",
+      }}
+    >
+      <Content>
+        <Flex vertical gap={16} style={{ width: "100%", alignItems: "start" }}>
+          {isLoading ? (
             <div
               style={{
                 display: "flex",
-                gap: 32,
-                alignItems: "flex-start",
+                justifyContent: "center",
+                padding: "32px 0",
               }}
             >
-              <Space style={{ backgroundColor: "#FAFAFA" }}>
-                <img src="/placeholder.png" width={480} alt="item preview" />
-              </Space>
+              <Spin size="large" />
+            </div>
+          ) : isError ? (
+            <Alert type="error" message={errorMessage} />
+          ) : (
+            <>
+              <Flex vertical gap={12} style={{ width: "100%" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                    gap: 16,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Title level={4} style={{ margin: 0 }}>
+                    {data?.title}
+                  </Title>
+                  <Title level={5} style={{ margin: 0 }}>
+                    {data && data.price !== null
+                      ? data.price.toLocaleString("ru-RU")
+                      : "—"}{" "}
+                    ₽
+                  </Title>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                    gap: 16,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Flex gap={12} style={{ marginTop: 8 }}>
+                    <Button onClick={() => navigate("/ads")}>
+                      Назад к списку
+                    </Button>
+                    <Button
+                      type="primary"
+                      style={{ borderRadius: "8px" }}
+                      onClick={() => navigate(`/ads/${id}/edit`)}
+                    >
+                      Редактировать
+                      <img src="/EditIcon.svg" alt="edit icon" />
+                    </Button>
+                  </Flex>
+
+                  <Flex vertical gap={0} style={{ alignItems: "flex-start" }}>
+                    <Text type="secondary">
+                      Опубликовано: {data ? formatDate(data.createdAt) : ""}
+                    </Text>
+                    <Text type="secondary">
+                      Отредактировано: {data ? formatDate(data.updatedAt) : ""}
+                    </Text>
+                  </Flex>
+                </div>
+              </Flex>
+              <Divider />
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: 32,
+                  alignItems: "flex-start",
+                }}
+              >
+                <Space style={{ backgroundColor: "#FAFAFA" }}>
+                  <img src="/placeholder.png" width={480} alt="item preview" />
+                </Space>
+
+                <Flex
+                  vertical
+                  gap={12}
+                  style={{ width: "100%", alignItems: "flex-start" }}
+                >
+                  {data?.needsRevision ? (
+                    <Alert
+                      type="warning"
+                      title="Требуются доработки"
+                      showIcon
+                      description={
+                        <div>
+                          <div style={{ marginTop: 4, textAlign: "start" }}>
+                            У объявления не заполнены поля:
+                          </div>
+                          <ul>
+                            {getMissingRevisionFields(data).map((item) => (
+                              <li key={item} style={{ width: "fit-content" }}>
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      }
+                      style={{
+                        padding: "12px 16px",
+                        borderRadius: "8px",
+                        width: "512px",
+                        maxWidth: "512px",
+                      }}
+                    ></Alert>
+                  ) : (
+                    <Alert
+                      type="success"
+                      message="Объявление заполнено корректно."
+                    />
+                  )}
+                  <Title level={5} style={{ margin: 0 }}>
+                    Характеристики
+                  </Title>
+                  {data ? renderParams(data) : null}
+                </Flex>
+              </div>
 
               <Flex
                 vertical
                 gap={12}
-                style={{ width: "100%", alignItems: "flex-start" }}
+                style={{ alignItems: "flex-start", maxWidth: "480px" }}
               >
-                {data?.needsRevision ? (
-                  <Alert
-                    type="warning"
-                    title="Требуются доработки"
-                    showIcon
-                    description={
-                      <div>
-                        <div style={{ marginTop: 4, textAlign: "start" }}>
-                          У объявления не заполнены поля:
-                        </div>
-                        <ul>
-                          {getMissingRevisionFields(data).map((item) => (
-                            <li key={item} style={{ width: "fit-content" }}>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    }
-                    style={{
-                      padding: "12px 16px",
-                      borderRadius: "8px",
-                      width: "512px",
-                      maxWidth: "512px",
-                    }}
-                  ></Alert>
-                ) : (
-                  <Alert
-                    type="success"
-                    message="Объявление заполнено корректно."
-                  />
-                )}
                 <Title level={5} style={{ margin: 0 }}>
-                  Характеристики
+                  Описание
                 </Title>
-                {data ? renderParams(data) : null}
+                <Text
+                  style={{
+                    textAlign: "start",
+                    whiteSpace: "pre-wrap",
+                    display: "block",
+                  }}
+                >
+                  {data?.description?.trim()
+                    ? data.description
+                    : "Описание отсутствует"}
+                </Text>
               </Flex>
-            </div>
-
-            <Flex
-              vertical
-              gap={12}
-              style={{ alignItems: "flex-start", maxWidth: "480px" }}
-            >
-              <Title level={5} style={{ margin: 0 }}>
-                Описание
-              </Title>
-              <Text
-                style={{
-                  textAlign: "start",
-                  whiteSpace: "pre-wrap",
-                  display: "block",
-                }}
-              >
-                {data?.description?.trim()
-                  ? data.description
-                  : "Описание отсутствует"}
-              </Text>
-            </Flex>
-          </>
-        )}
-      </Flex>
-    </Container>
+            </>
+          )}
+        </Flex>
+      </Content>
+    </Layout>
   );
 }
