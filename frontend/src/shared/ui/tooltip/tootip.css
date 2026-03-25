@@ -1,0 +1,9 @@
+.ant-tooltip div.ant-tooltip-container {
+  background-color: white;
+  color: black;
+  width: 400px;
+}
+
+.ant-tooltip .ant-tooltip-arrow::before {
+  background-color: white;
+}

@@ -7,6 +7,7 @@ import {
   Flex,
   Input,
   Layout,
+  Select,
   Space,
   Spin,
   Typography,
@@ -25,9 +26,11 @@ import {
   aiPredictMarketPrice,
 } from "@/features/ads/ai-generate/api/adsAi";
 import { Content } from "antd/es/layout/layout";
-import RequiredFields from "@/widgets/item-edit/required-fields/ui/requiredFields";
+// import RequiredFields from "@/widgets/item-edit/required-fields/ui/requiredFields";
 import OptionalFields from "@/widgets/item-edit/optional-fields/ui/optionalFields";
 import useCheckError from "@/features/ads/edit-ad/hooks/useCheckErrors";
+import WhiteTooltip from "@/shared/ui/tooltip/tooltip";
+import { CATEGORY_LABELS, CATEGORY_OPTIONS } from "@/shared/constants/categories";
 
 type DraftState = {
   category: ItemCategory;
@@ -67,8 +70,20 @@ export function AdsEditPage() {
   const [proposedDescription, setProposedDescription] = useState<string | null>(
     null,
   );
+  const [textDescButton, setTextDescButton] = useState<'Придумать описание' | 'Улучшить описание' | 'Выполняется запрос' | 'Повторить запрос'>('Придумать описание');
+  const [textPriceButton, setTextPriceButton] = useState<'Узнать рыночную цену' | 'Выполняется запрос' | 'Повторить запрос'>('Узнать рыночную цену')
   const [proposedPrice, setProposedPrice] = useState<number | null>(null);
   const {errorFields, checkError} = useCheckError();
+  const [focusedFields, setFocusedFields] = useState<string[]>([]);
+    
+  const handleFocusedField = (field: string) => {
+    if (focusedFields.includes(field))  setFocusedFields(focusedFields.filter((elem) => elem != field));
+    else setFocusedFields(focusedFields.concat([field]));
+  };
+
+  useEffect(() => {
+    if (textDescButton == 'Придумать описание' &&  draft?.description) setTextDescButton('Улучшить описание');
+  })
   
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["item-edit", id],
@@ -178,6 +193,7 @@ export function AdsEditPage() {
     const controller = new AbortController();
     draftAbortRef.current = controller;
     setAiLoading("description");
+    setTextDescButton('Выполняется запрос');
 
     try {
       const raw = await aiImproveDescription({
@@ -196,6 +212,7 @@ export function AdsEditPage() {
       setAiError(e instanceof Error ? e.message : "Ошибка генерации описания");
     } finally {
       setAiLoading(null);
+      setTextDescButton('Повторить запрос')
     }
   };
 
@@ -214,6 +231,7 @@ export function AdsEditPage() {
     const controller = new AbortController();
     draftAbortRef.current = controller;
     setAiLoading("price");
+    setTextPriceButton('Выполняется запрос')
 
     try {
       const price = await aiPredictMarketPrice({
@@ -232,6 +250,7 @@ export function AdsEditPage() {
       setAiError(e instanceof Error ? e.message : "Ошибка генерации цены");
     } finally {
       setAiLoading(null);
+      setTextPriceButton('Повторить запрос')
     }
   };
 
@@ -279,15 +298,171 @@ export function AdsEditPage() {
                   Редактирование объявления
                 </Title>
 
-                <RequiredFields
-                  draft={draft}
-                  startAiPrice={startAiPrice}
-                  aiLoading={aiLoading}
-                  checkError={checkError}
-                  setDraft={setDraft}
-                  handleChange={handleChange}
-                  setProposedPrice={setProposedPrice}
-                />
+                <Flex
+                  vertical
+                  gap={8}
+                  style={{ width: "100%", alignItems: "start" }}
+                >
+                  <Text>Категория</Text>
+                  <Select
+                    onFocus={() => handleFocusedField("category")}
+                    onBlur={() => handleFocusedField("category")}
+                    style={{ width: "256px", textAlign: "left" }}
+                    value={draft.category}
+                    status={
+                      (draft.category.length == 0 || !draft.category) &&
+                      !focusedFields.includes("title")
+                        ? "error"
+                        : ""
+                    }
+                    options={CATEGORY_OPTIONS.map((category) => ({
+                      value: category,
+                      label: CATEGORY_LABELS[category],
+                    }))}
+                    onChange={(value) => {
+                      const next = value as ItemCategory;
+                      checkError("category", value);
+                      handleChange();
+                      setDraft((prev) =>
+                        prev ? { ...prev, category: next, params: {} } : prev,
+                      );
+                    }}
+                  />
+                  {((draft.category.length == 0 || !draft.category) &&
+                    !focusedFields.includes("title")) ?? (
+                    <Text style={{ color: "#EC221F" }}>
+                      Категория должна быть выбрана
+                    </Text>
+                  )}
+                </Flex>
+
+                <Divider style={{ width: "100%", height: "1px", margin: 0 }} />
+
+                <Flex
+                  vertical
+                  gap={8}
+                  style={{ width: "100%", alignItems: "start" }}
+                >
+                  <Text>Название</Text>
+                  <Input
+                    onFocus={() => handleFocusedField("title")}
+                    onBlur={() => handleFocusedField("title")}
+                    style={{ width: "100%", maxWidth: "456px" }}
+                    status={
+                      (draft.title.length == 0 || !draft.title) &&
+                      !focusedFields.includes("title")
+                        ? "error"
+                        : ""
+                    }
+                    value={draft.title}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      checkError("title", e.target.value);
+                      handleChange();
+                      setDraft((prev) =>
+                        prev ? { ...prev, title: next } : prev,
+                      );
+                    }}
+                  />
+                  {(draft.title.length == 0 || !draft.title) &&
+                    !focusedFields.includes("title") && (
+                      <Text style={{ color: "#EC221F" }}>
+                        Название должно быть заполнено
+                      </Text>
+                    )}
+                </Flex>
+
+                <Divider style={{ width: "100%", height: "1px", margin: 0 }} />
+
+                <Flex
+                  gap={12}
+                  align="end"
+                  style={{
+                    width: "100%",
+                    alignItems: "end",
+                    maxWidth: "675px",
+                  }}
+                >
+                  <Flex
+                    vertical
+                    gap={8}
+                    style={{ width: "100%", alignItems: "start" }}
+                  >
+                    <Text>Цена</Text>
+                    <Input
+                      onFocus={() => handleFocusedField("price")}
+                      onBlur={() => handleFocusedField("price")}
+                      status={
+                        (draft.price == 0 || !draft.price) &&
+                        !focusedFields.includes("price")
+                          ? "error"
+                          : ""
+                      }
+                      style={{ width: "100%", maxWidth: "456px" }}
+                      value={String(draft.price)}
+                      onChange={(e) => {
+                        const next = Number(e.target.value);
+                        checkError("price", e.target.value);
+                        setProposedPrice(null);
+                        handleChange();
+                        setDraft((prev) =>
+                          prev ? { ...prev, price: next } : prev,
+                        );
+                      }}
+                    />
+                    {(draft.price == 0 || !draft.price) &&
+                      !focusedFields.includes("price") && (
+                        <Text style={{ color: "#EC221F" }}>
+                          Цена должна быть указана
+                        </Text>
+                      )}
+                  </Flex>
+                  <WhiteTooltip open={!!proposedPrice} object={
+                    <Button
+                      variant="solid"
+                      color="gold"
+                      style={{ backgroundColor: "#F9F1E6", color: "#FFA940", width: '195px' }}
+                      onClick={startAiPrice}
+                      loading={aiLoading !== null}
+                    >
+                      {
+                          typeof aiLoading != 'string' && (textPriceButton == 'Повторить запрос' ? <img src="/RedoIcon.svg" /> : <img src="/BulbIcon.svg" />)
+                        }
+                      {textPriceButton}
+                    </Button>
+                  }>
+                    <Flex
+                      vertical
+                      gap={8}
+                      style={{ width: "100%" }}
+                    >
+                      <div style={{ whiteSpace: "pre-wrap" }}>
+                        {proposedPrice}
+                      </div>
+                      <Flex gap={10}>
+                        <Button
+                          style={{outline: 'none'}}
+                          type="primary"
+                          onClick={() => {
+                            handleChange();
+                            setDraft((prev) =>
+                              prev && typeof proposedPrice === 'number' ? { ...prev, price: proposedPrice } : prev,
+                            );
+                            setProposedPrice(null);
+                            if (proposedPrice) checkError('price', proposedPrice)
+                          }}
+                        >
+                          Применить
+                        </Button>
+                        <Button onClick={() => setProposedPrice(null)}>
+                          Отменить
+                        </Button>
+                      </Flex>
+                    </Flex>
+                  </WhiteTooltip>
+                </Flex>
+
+                <Divider style={{ width: "100%", height: "1px", margin: 0 }} />
 
                 <div
                   style={{
@@ -353,18 +528,49 @@ export function AdsEditPage() {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Button
-                      variant="solid"
-                      color="gold"
-                      style={{ backgroundColor: "#F9F1E6", color: "#FFA940" }}
-                      onClick={startAiDescription}
-                      disabled={aiLoading !== null}
-                    >
-                      <img src="/BulbIcon.svg" />
-                      {aiLoading === "description"
-                        ? "Генерация..."
-                        : "Улучшить описание"}
-                    </Button>
+                    <WhiteTooltip object={
+                      <Button
+                        loading={aiLoading !== null}
+                        variant="solid"
+                        color="gold"
+                        style={{ backgroundColor: "#F9F1E6", color: "#FFA940", border: 'none', outline: 'none', width: '195px' }}
+                        onClick={startAiDescription}
+                        disabled={aiLoading !== null}
+                      >
+                        {
+                          typeof aiLoading != 'string' && (textDescButton == 'Повторить запрос' ? <img src="/RedoIcon.svg" /> : <img src="/BulbIcon.svg" />)
+                        }
+                        {textDescButton}
+                      </Button>} open={!!proposedDescription}>
+                      <Flex
+                        vertical
+                        gap={8}
+                        style={{ width: "100%" }}
+                      >
+                        <div style={{ whiteSpace: "pre-wrap" }}>
+                          {proposedDescription}
+                        </div>
+                        <Flex gap={10}>
+                          <Button
+                            style={{outline: 'none'}}
+                            type="primary"
+                            onClick={() => {
+                              handleChange();
+                              setDraft((prev) =>
+                                prev && typeof proposedDescription === 'string' ? { ...prev, description: proposedDescription } : prev,
+                              );
+                              setProposedDescription(null);
+                              checkError('description', String(proposedDescription))
+                            }}
+                          >
+                            Применить
+                          </Button>
+                          <Button onClick={() => setProposedDescription(null)}>
+                            Отменить
+                          </Button>
+                        </Flex>
+                      </Flex>
+                    </WhiteTooltip>
                     <Text
                       type={
                         draft.description.length > 1000 ? "danger" : undefined
@@ -374,41 +580,6 @@ export function AdsEditPage() {
                     </Text>
                   </Flex>
                 </Flex>
-
-                {proposedDescription ? (
-                  <Alert
-                    type="info"
-                    style={{
-                      textAlign: "left",
-                    }}
-                    message="AI предложило описание"
-                    description={
-                      <Space
-                        direction="vertical"
-                        size={8}
-                        style={{ width: "100%" }}
-                      >
-                        <div style={{ whiteSpace: "pre-wrap" }}>
-                          {proposedDescription}
-                        </div>
-                        <Button
-                          type="primary"
-                          onClick={() => {
-                            handleChange();
-                            setDraft((prev) =>
-                              prev
-                                ? { ...prev, description: proposedDescription }
-                                : prev,
-                            );
-                            setProposedDescription(null);
-                          }}
-                        >
-                          Применить
-                        </Button>
-                      </Space>
-                    }
-                  />
-                ) : null}
 
                 {proposedPrice !== null ? (
                   <Alert
