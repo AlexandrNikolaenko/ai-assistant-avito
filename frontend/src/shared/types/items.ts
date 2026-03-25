@@ -66,3 +66,11 @@ export type ItemUpdateIn = {
 
 export type ItemSortColumn = "title" | "createdAt";
 export type SortDirection = "asc" | "desc";
+
+export type DraftState = {
+  category: ItemCategory;
+  title: string;
+  description: string;
+  price: number;
+  params: Partial<ItemParams>;
+};
