@@ -1,20 +1,17 @@
 import { useMemo, useState } from "react";
 import {
-  Alert,
-  Box,
-  Button,
-  // Checkbox,
-  CircularProgress,
-  Container,
-  FormControlLabel,
-  FormGroup,
-  Grid,
-  Paper,
-  Stack,
-  // Switch,
+  Checkbox,
+  Divider,
+  Flex,
+  Form,
+  Layout,
+  Switch,
   Typography,
-} from "@mui/material";
-import { Checkbox, Switch } from "antd";
+  Button,
+  Space,
+  Spin,
+  Alert,
+} from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { CATEGORY_LABELS } from "../constants/categories";
 import type {
@@ -28,6 +25,8 @@ import Sort from "../components/sort/sort";
 import Pagination from "../components/pagination/pagination";
 
 const PAGE_SIZE = 10;
+
+const { Content } = Layout;
 
 export function AdsListPage() {
   const [q, setQ] = useState("");
@@ -116,128 +115,149 @@ export function AdsListPage() {
   };
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{ py: 3, backgroundColor: "#f7f5f8", minHeight: "100vh" }}
+    <Layout
+      style={{
+        padding: "12px 32px",
+        backgroundColor: "#f7f5f8",
+        minHeight: "100vh",
+      }}
     >
-      <Stack spacing={2}>
-        <Stack
-          direction="column"
-          spacing={1}
-          paddingLeft={"8px"}
-          alignItems="start"
-        >
-          <Typography
-            variant="h5"
-            sx={{ flexGrow: 1, fontWeight: 500, fontSize: "22px" }}
+      <Content>
+        <Flex vertical gap={16}>
+          <Flex
+            vertical
+            gap={0}
+            style={{ padding: "12px 8px", alignItems: "start" }}
           >
-            Мои объявления
-          </Typography>
-          <Typography
-            variant="h5"
-            sx={{ flexGrow: 1, color: "#848388", fontSize: "18px" }}
-          >
-            {total} объявления
-          </Typography>
-        </Stack>
-        <Sort
-          q={q}
-          layout={layout}
-          handleSearch={handleSearch}
-          handleByList={handleByList}
-          handleByGrid={handleByGrid}
-          sortColumn={sortColumn}
-          sortDirection={sortDirection}
-          handleSortCol={handleSortCol}
-          handleSortDir={handleSortDir}
-        />
-        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-          <Box sx={{ width: { xs: "100%", md: 280 } }}>
-            {/* фильтр */}
+            <Typography.Title
+              level={4}
+              style={{
+                flexGrow: 1,
+                fontWeight: 500,
+                fontSize: "22px",
+                margin: 0,
+              }}
+            >
+              Мои объявления
+            </Typography.Title>
+            <Typography.Text
+              style={{
+                flexGrow: 1,
+                color: "#848388",
+                fontSize: "18px",
+                margin: 0,
+              }}
+            >
+              {total} объявления
+            </Typography.Text>
+          </Flex>
+          <Sort
+            q={q}
+            layout={layout}
+            handleSearch={handleSearch}
+            handleByList={handleByList}
+            handleByGrid={handleByGrid}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+            handleSortCol={handleSortCol}
+            handleSortDir={handleSortDir}
+          />
+          <Flex gap={24}>
+            <Flex style={{ width: "100%", maxWidth: "256px" }}>
+              {/* фильтр */}
 
-            <Stack spacing={2.5} sx={{ position: { md: "sticky" }, top: 16 }}>
-              <Paper
-                elevation={0}
-                sx={{
-                  padding: "16px",
-                  borderRadius: "8px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    textAlign: "left",
-                  }}
-                >
-                  Фильтры
-                </Typography>
-                <button
+              <Flex vertical gap={10} style={{ position: "sticky", top: 16 }}>
+                <Flex
+                  vertical
+                  gap={10}
                   style={{
-                    padding: 0,
-                    background: "none",
-                    border: "none",
-                    color: "#000000",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    fontSize: "14px",
+                    padding: "16px",
+                    borderRadius: "8px",
+                    backgroundColor: "white",
                   }}
-                  onClick={handleCategoryOpen}
                 >
-                  Категории
-                  <img
-                    src="/ArrowDown.svg"
+                  <Typography.Text
                     style={{
-                      transform: isCategoryOpen
-                        ? "rotate(0)"
-                        : "rotate(180deg)",
+                      fontSize: "16px",
+                      fontWeight: "700",
+                      textAlign: "left",
+                      margin: 0,
                     }}
-                  ></img>
-                </button>
-                <FormGroup
-                  sx={{
-                    height: isCategoryOpen ? "auto" : "0px",
-                    overflow: "hidden",
-                    gap: "8px",
-                  }}
-                >
-                  {(Object.keys(CATEGORY_LABELS) as ItemCategory[]).map(
-                    (category) => (
-                      <FormControlLabel
-                        sx={{ fontSize: "14px", margin: 0, padding: 0 }}
-                        key={category}
-                        control={
+                  >
+                    Фильтры
+                  </Typography.Text>
+                  <button
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#000000",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      fontSize: "14px",
+                    }}
+                    onClick={handleCategoryOpen}
+                  >
+                    <Typography.Text style={{ margin: 0 }}>
+                      Категории
+                    </Typography.Text>
+                    <img
+                      src="/ArrowDown.svg"
+                      style={{
+                        transform: isCategoryOpen
+                          ? "rotate(0)"
+                          : "rotate(180deg)",
+                      }}
+                    ></img>
+                  </button>
+                  <Form
+                    style={{
+                      height: isCategoryOpen ? "auto" : "0px",
+                      overflow: "hidden",
+                      gap: "8px",
+                      alignItems: "start",
+                    }}
+                  >
+                    {(Object.keys(CATEGORY_LABELS) as ItemCategory[]).map(
+                      (category) => (
+                        <Form.Item
+                          style={{
+                            fontSize: "14px",
+                            margin: 0,
+                            padding: 0,
+                            width: "min-content",
+                          }}
+                          key={category}
+                        >
                           <Checkbox
+                            style={{ width: "min-content" }}
                             checked={selectedCategories.includes(category)}
                             onChange={() => toggleCategory(category)}
                           >
                             {CATEGORY_LABELS[category]}
                           </Checkbox>
-                        }
-                        label={""}
-                      />
-                    ),
-                  )}
-                </FormGroup>
-                <div className="separator"></div>
-                <FormControlLabel
-                  sx={{
-                    textAlign: "left",
-                    flexDirection: "row-reverse",
-                    gap: 0,
-                    textWrap: "wrap",
-                    maxWidth: "224px",
-                    margin: 0,
-                    padding: 0,
-                    fontWeight: 700,
-                  }}
-                  control={
+                        </Form.Item>
+                      ),
+                    )}
+                  </Form>
+                  <Divider
+                    style={{ width: "100%", height: "1px", margin: 0 }}
+                  />
+                  <Form.Item
+                    style={{
+                      textAlign: "left",
+                      flexDirection: "row-reverse",
+                      gap: 0,
+                      textWrap: "wrap",
+                      maxWidth: "224px",
+                      margin: 0,
+                      padding: 0,
+                      fontWeight: 700,
+                    }}
+                  >
+                    Только требующие доработок
                     <Switch
                       checked={needsRevisionOnly}
                       onChange={() => {
@@ -245,85 +265,94 @@ export function AdsListPage() {
                         setNeedsRevisionOnly((prev) => !prev);
                       }}
                     />
-                  }
-                  label="Только требующие доработок"
-                />
-              </Paper>
+                  </Form.Item>
+                </Flex>
 
-              <Button
-                style={{
-                  width: "100%",
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "8px",
-                  border: "none",
-                  padding: "12px auto",
-                  textTransform: "none",
-                  color: "#848388",
-                }}
-                onClick={resetFilters}
-              >
-                Сбросить фильтры
-              </Button>
-            </Stack>
-          </Box>
+                <Button
+                  type="text"
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "8px",
+                    border: "none",
+                    padding: "12px 0",
+                    height: "auto",
+                    textTransform: "none",
+                    color: "#848388",
+                  }}
+                  onClick={resetFilters}
+                >
+                  Сбросить фильтры
+                </Button>
+              </Flex>
+            </Flex>
 
-          <Box
-            sx={{
-              flexGrow: 1,
-              gap: "10px",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {isLoading ? (
-              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-                <CircularProgress />
-              </Box>
-            ) : isError ? (
-              <Alert severity="error">{errorMessage}</Alert>
-            ) : (
-              <>
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns:
-                      layout === "grid"
-                        ? "repeat(auto-fill, minmax(200px, 1fr))"
-                        : "1fr",
+            <Flex
+              style={{
+                flexGrow: 1,
+                gap: "10px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {isLoading ? (
+                <Space
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "24px 0",
                   }}
                 >
-                  {data?.items.map((item) =>
-                    layout == "list" ? (
-                      <ListItemCard {...item} key={item.id} />
-                    ) : (
-                      <ItemCard {...item} key={item.id} />
-                    ),
-                  )}
-                </Grid>
-
-                {/* пагинация */}
-
-                <Pagination
-                  page={page}
-                  totalPages={totalPages}
-                  setPage={setPage}
-                />
-
-                {isFetching ? (
-                  <Typography
-                    variant="body2"
-                    sx={{ mt: 1, textAlign: "center" }}
+                  <Spin />
+                </Space>
+              ) : isError ? (
+                <Alert description={errorMessage} type="error"></Alert>
+              ) : (
+                <>
+                  <div
+                    style={{
+                      gap: "16px",
+                      display: "grid",
+                      gridTemplateColumns:
+                        layout === "grid"
+                          ? "repeat(auto-fill, minmax(200px, 1fr))"
+                          : "1fr",
+                    }}
                   >
-                    Обновляем данные...
-                  </Typography>
-                ) : null}
-              </>
-            )}
-          </Box>
-        </Stack>
-      </Stack>
-    </Container>
+                    {data?.items.map((item) =>
+                      layout == "list" ? (
+                        <ListItemCard {...item} key={item.id} />
+                      ) : (
+                        <ItemCard {...item} key={item.id} />
+                      ),
+                    )}
+                  </div>
+
+                  {/* пагинация */}
+
+                  <Pagination
+                    page={page}
+                    totalPages={totalPages}
+                    setPage={setPage}
+                  />
+
+                  {isFetching ? (
+                    <Typography.Text
+                      style={{
+                        marginTop: 1,
+                        textAlign: "center",
+                        marginBottom: 0,
+                      }}
+                    >
+                      Обновляем данные...
+                    </Typography.Text>
+                  ) : null}
+                </>
+              )}
+            </Flex>
+          </Flex>
+        </Flex>
+      </Content>
+    </Layout>
   );
 }

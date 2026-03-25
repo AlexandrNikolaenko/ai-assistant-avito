@@ -1,10 +1,4 @@
-import {
-  Paper,
-  Stack,
-  FormControl,
-  // Select, MenuItem
-} from "@mui/material";
-import { Select } from "antd";
+import { Flex, Form, Select } from "antd";
 import "./sort.css";
 
 export type SortEvent =
@@ -72,8 +66,14 @@ export default function Sort({
   };
 
   return (
-    <Paper elevation={0} sx={{ padding: "12px", borderRadius: "20px" }}>
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
+    <Flex
+      style={{
+        padding: "12px",
+        borderRadius: "20px",
+        backgroundColor: "#FFFFFF",
+      }}
+    >
+      <Flex gap={24} style={{ width: "100%" }}>
         <div className="search">
           <input
             value={q}
@@ -97,7 +97,7 @@ export default function Sort({
             </svg>
           </button>
         </div>
-        <Stack direction={"row"} spacing={2}>
+        <Flex gap={16}>
           <div
             style={{
               display: "flex",
@@ -164,9 +164,8 @@ export default function Sort({
               </svg>
             </button>
           </div>
-          <FormControl
-            size="small"
-            sx={{ width: "240px", height: "32px" }}
+          <Form.Item
+            style={{ width: "240px", height: "32px", margin: 0 }}
             className="custom-select"
           >
             <Select
@@ -195,46 +194,9 @@ export default function Sort({
               ]}
               onChange={handleSort}
             />
-            {/* <Select
-              sx={{
-                width: "240px",
-                height: "32px",
-                borderRadius: "8px",
-                border: "4px solid #F4F4F6",
-                outline: "none",
-                fontSize: "14px",
-              }}
-              label="Сортировка"
-              value={sortColumn + " " + sortDirection}
-              onChange={handleSort}
-            >
-              <MenuItem value="createdAt desc">
-                По новизне (сначала новые)
-              </MenuItem>
-              <MenuItem value="createdAt asc">
-                По новизне (сначала старые)
-              </MenuItem>
-              <MenuItem value="title desc">По названию (А → Я)</MenuItem>
-              <MenuItem value="title asc">По названию (Я → А)</MenuItem>
-              <MenuItem value="price desc">По цене (сначала дешевле)</MenuItem>
-              <MenuItem value="price asc">По цене (сначала дороже)</MenuItem>
-            </Select> */}
-          </FormControl>
-        </Stack>
-
-        {/* <FormControl size="small" fullWidth>
-          <InputLabel>Направление</InputLabel>
-          <Select
-            label="Направление"
-            value={sortDirection}
-            onChange={handleSortDir}
-          >
-            <MenuItem value="desc">По убыванию</MenuItem>
-            <MenuItem value="asc">По возрастанию</MenuItem>
-          </Select>
-        </FormControl> */}
-        {/* </Stack>/ */}
-      </Stack>
-    </Paper>
+          </Form.Item>
+        </Flex>
+      </Flex>
+    </Flex>
   );
 }
